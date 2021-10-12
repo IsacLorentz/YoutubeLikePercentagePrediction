@@ -172,11 +172,11 @@ def program(link):
 
     with open("constants.json") as json_file:
         constants = json.load(json_file)
-        constants['OAuthFile'] = st.secrets["api_key"] # replace with your API key
+        constants["OAuthFile"] = st.secrets["api_key"]  # replace with your API key
         ## append key
 
-    with open("authorization/apiKey.json") as json_file:
-        keys = json.load(json_file)
+    # with open("authorization/apiKey.json") as json_file:
+    #    keys = json.load(json_file)
 
     total_comments = []
 
@@ -185,7 +185,7 @@ def program(link):
     youtube = googleapiclient.discovery.build(
         constants["ApiServiceName"],
         constants["ApiVersion"],
-        developerKey=keys["APIKey"],
+        developerKey=st.secrets["api_key"],
     )
 
     comments, commentListWithDate = ec.commentExtract(
@@ -258,7 +258,9 @@ def program(link):
 
             diff = result - actual
             absDiff = abs(diff)
-            df2 = pd.DataFrame([diff, absDiff],)
+            df2 = pd.DataFrame(
+                [diff, absDiff],
+            )
             loadedLikePercentageDifferences = loadedLikePercentageDifferences.append(
                 df2, ignore_index=True
             )

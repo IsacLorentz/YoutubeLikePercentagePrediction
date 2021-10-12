@@ -1,3 +1,4 @@
+import streamlit as st
 """
 This file is to fetch the comments for the videos
 """
@@ -11,10 +12,10 @@ from googleapiclient.errors import HttpError
 
 import extract
 
-with open("authorization/apiKey.json") as json_file:
-    keys = json.load(json_file)
-key = keys["APIKey"]
-
+#with open("authorization/apiKey.json") as json_file:
+#    keys = json.load(json_file)
+#key = keys["APIKey"]
+key = st.secrets['api_key']
 
 # function to fetch comments along with date
 def commentExtract(videoId, youtube, count=-1):
