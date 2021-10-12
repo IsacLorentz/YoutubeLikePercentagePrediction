@@ -30,9 +30,7 @@ if st.checkbox("Show Prediction Info"):
     st.markdown(
         """ are the number of comments classified as positive, negative and neutral respectively. """
     )
-    st.markdown(
-        "[Project repo link](https://github.com/IsacLorentz/YoutubeLikePercentagePrediction)"
-    )
+    
 else:
 
     link = st.text_input("Enter link to a Youtube video")
