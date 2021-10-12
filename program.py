@@ -31,7 +31,7 @@ if st.checkbox("Show Prediction Info"):
         """ are the number of comments classified as positive, negative and neutral respectively. """
     )
     st.markdown(
-        "Link to project repo: github.com/IsacLorentz/YoutubeLikePercentagePrediction"
+        "[Project repo link](https://github.com/IsacLorentz/YoutubeLikePercentagePrediction)"
     )
 else:
 
