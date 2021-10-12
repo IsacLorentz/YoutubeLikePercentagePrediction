@@ -1,6 +1,6 @@
 [Link to Streamlit webapp](https://share.streamlit.io/isaclorentz/youtubelikepercentageprediction/main/program.py)
 
-This project is an extension of the bachelor thesis I wrote at KTH together with Gurjiwan Singh (Link: http://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-301779).
+This project is an extension of the [bachelor thesis](http://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-301779) I wrote at KTH together with Gurjiwan Singh.
 
 The program predicts the like percentage of any Youtube video entered by the user. Sometimes like and dislike counts are hidden on certain videos and then this program can give useful info (when comments are enabled).
 
