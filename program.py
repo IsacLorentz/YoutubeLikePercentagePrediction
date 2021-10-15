@@ -30,13 +30,12 @@ if st.checkbox("Show Prediction Info"):
     st.markdown(
         """ are the number of comments classified as positive, negative and neutral respectively. """
     )
-
+    
 else:
 
     link = st.text_input("Enter link to a Youtube video")
 
     if link:
-        st.markdown("(Program can take up to 3 minutes to run)")
         (
             foundVideoID,
             foundComments,
