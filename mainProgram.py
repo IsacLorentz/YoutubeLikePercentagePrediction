@@ -10,7 +10,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from wordcloud import WordCloud
 
 import extractComments as ec
-from program import progressBar
 
 
 def program(link):
@@ -213,8 +212,6 @@ def program(link):
             None,
         )
 
-    progressBar.progress(10)
-
     likes, dislikes = ec.getLikesAndDislikes(youtube, videoID)
     if dislikes is None:
         if likes is None:
@@ -222,11 +219,7 @@ def program(link):
         else:
             onlyLikes = True
 
-    
-
     videoTitle, channelTitle = ec.getVideoAndChannelTitle(youtube, videoID)
-
-    progressBar.progress(20)
 
     (
         result,
@@ -238,8 +231,6 @@ def program(link):
         neutralCount,
     ) = classifyComments(total_comments, "logRegClassifier.model", "vectorizer.pickle")
 
-    progressBar.progress(40)
-
     commentsStr = str(comments)
     posCommentsStr = str(positiveComments)
     neutCommentsStr = str(neutralComments)
@@ -249,8 +240,6 @@ def program(link):
 
     wordcloudPos, wordcloudNeut, wordcloudNeg = getWordClouds(tfidWordCloudDataframe)
 
-    progressBar.progress(60)
-
     barChartVals = [positiveCount, negativeCount, neutralCount]
     labels = ["Positive", "Negative", "Neutral"]
     barChartValues = pd.DataFrame({"Number of comments": barChartVals, "Class": labels})
@@ -258,8 +247,6 @@ def program(link):
     loadedVideoIDs = pickle.load(open("videoIDs.pickle", "rb"))
 
     loadedLikePercentageDifferences = pd.read_pickle("likePercentageDifferences.pickle")
-
-    progressBar.progress(90)
 
     if not noLikeInfo:
         actual = 100 * (likes / (likes + dislikes))
