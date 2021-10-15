@@ -36,8 +36,6 @@ else:
     link = st.text_input("Enter link to a Youtube video")
 
     if link:
-        progressBar = st.progress(0)
-
         (
             foundVideoID,
             foundComments,
