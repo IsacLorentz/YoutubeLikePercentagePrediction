@@ -22,7 +22,7 @@ if st.checkbox("Show Prediction Info"):
     st.markdown(str)
     st.latex(
         r"""
-    predicted \: like \: proportion = 100 \cdot  \frac{N_{positive}+ N_{neutral}}{N_{positive}+ N_{neutral} + N_{negative}}
+    predicted \: like \: percentage = 100 \cdot  \frac{N_{positive}+ N_{neutral}}{N_{positive}+ N_{neutral} + N_{negative}}
     """
     )
     st.markdown(""" , where """)
@@ -36,24 +36,30 @@ else:
     link = st.text_input("Enter link to a Youtube video")
 
     if link:
-        st.markdown("(Program can take up to 3 minutes to run)")
-        (
-            foundVideoID,
-            foundComments,
-            videoTitle,
-            channelTitle,
-            predictedLikePercentage,
-            actualLikePercentage,
-            difference,
-            mae,
-            std,
-            noVideos,
-            noLikeInfo,
-            posCloud,
-            neutCloud,
-            negCloud,
-            barChart,
-        ) = mp.program(link)
+        # st.markdown("(Program can take up to 3 minutes to run)")
+        progressBar = st.progress(0)
+        progressBar.progress(3)
+
+        with st.spinner("(Program can take up to 3 minutes to run)"):
+            (
+                foundVideoID,
+                foundComments,
+                videoTitle,
+                channelTitle,
+                predictedLikePercentage,
+                actualLikePercentage,
+                difference,
+                mae,
+                std,
+                noVideos,
+                noLikeInfo,
+                onlyLikes,
+                posCloud,
+                neutCloud,
+                negCloud,
+                barChart,
+            ) = mp.program(link)
+            progressBar.progress(50)
 
         if not foundVideoID:
             st.markdown("No Youtube Video ID was found in this link")
@@ -71,7 +77,7 @@ else:
                 + str(round(std, 2))
                 + " percentage points"
             )
-            if noLikeInfo:
+            if noLikeInfo or onlyLikes:
                 str1 = (
                     "**predicted like percentage of this video ("
                     + videoTitle
@@ -84,7 +90,7 @@ else:
                 str3 = (
                     "This program has predicted "
                     + str(noVideos)
-                    + "different videos with a mean absolute prediction error of "
+                    + " different videos with a mean absolute prediction error of "
                     + str(round(mae, 2))
                     + " percentage units and a standard deviation of "
                     + str(round(std, 2))
@@ -109,6 +115,7 @@ else:
                 )
                 st.markdown(str1)
                 st.markdown(str2)
+            progressBar.progress(60)
 
             colors = [(0.52, 0.8, 0.81), (0.22, 0.52, 0.71), (0.11, 0.18, 0.51)]
             if posCloud is not None:
@@ -117,6 +124,7 @@ else:
                 plt.title("Wordcloud of comments classified as positive")
                 plt.show()
                 st.pyplot()
+            progressBar.progress(70)
 
             if neutCloud is not None:
                 plt.imshow(neutCloud)
@@ -124,6 +132,7 @@ else:
                 plt.title("Wordcloud of comments classified as neutral")
                 plt.show()
                 st.pyplot()
+            progressBar.progress(80)
 
             if negCloud is not None:
                 plt.imshow(negCloud)
@@ -131,6 +140,7 @@ else:
                 plt.title("Wordcloud of comments classified as negative")
                 plt.show()
                 st.pyplot()
+            progressBar.progress(90)
 
             fig = px.bar(
                 barChart,
@@ -140,3 +150,5 @@ else:
                 title="Number of comments per class",
             )
             st.write(fig)
+            progressBar.progress(100)
+

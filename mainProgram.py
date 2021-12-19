@@ -169,6 +169,7 @@ def program(link):
         )
 
     noLikeInfo = False
+    onlyLikes = False
 
     with open("constants.json") as json_file:
         constants = json.load(json_file)
@@ -210,9 +211,11 @@ def program(link):
             None,
             None,
             None,
+            None,
         )
 
     likes, dislikes = ec.getLikesAndDislikes(youtube, videoID)
+    
     if dislikes is None:
         if likes is None:
             noLikeInfo = True
@@ -249,84 +252,101 @@ def program(link):
     loadedLikePercentageDifferences = pd.read_pickle("likePercentageDifferences.pickle")
 
     if not noLikeInfo:
-        actual = 100 * (likes / (likes + dislikes))
-        difference = abs(result - actual)
 
-        if videoID not in loadedVideoIDs:
-            loadedVideoIDs.add(videoID)
-            pickle.dump(loadedVideoIDs, open("videoIDs.pickle", "wb"))
-
-            diff = result - actual
-            absDiff = abs(diff)
-            df2 = pd.DataFrame(
-                [diff, absDiff],
-            )
-            loadedLikePercentageDifferences = loadedLikePercentageDifferences.append(
-                df2, ignore_index=True
-            )
-            loadedLikePercentageDifferences.to_pickle(
-                "likePercentageDifferences.pickle"
-            )
-
+        if onlyLikes:
             mae = loadedLikePercentageDifferences[
-                "likePercentageAbsDifferences"
-            ].sum() / len(loadedLikePercentageDifferences)
-
+                    "likePercentageAbsDifferences"
+                ].sum() / len(loadedLikePercentageDifferences)
             return (
-                True,
-                True,
-                videoTitle,
-                channelTitle,
-                result,
-                actual,
-                difference,
-                mae,
-                numpy.std(
-                    loadedLikePercentageDifferences["likePercentageAbsDifferences"],
-                    ddof=1,
-                ),
-                len(loadedVideoIDs),
-                noLikeInfo,
-                wordcloudPos,
-                wordcloudNeut,
-                wordcloudNeg,
-                barChartValues,
-            )
+                    True,
+                    True,
+                    videoTitle,
+                    channelTitle,
+                    result,
+                    None,
+                    None,
+                    mae,
+                    numpy.std(
+                        loadedLikePercentageDifferences["likePercentageDifferences"], ddof=1
+                    ),
+                    len(loadedVideoIDs),
+                    noLikeInfo,
+                    onlyLikes,
+                    wordcloudPos,
+                    wordcloudNeut,
+                    wordcloudNeg,
+                    barChartValues,
+                )
 
         else:
-            mae = loadedLikePercentageDifferences[
-                "likePercentageAbsDifferences"
-            ].sum() / len(loadedLikePercentageDifferences)
-            print("mae: ", mae)
-            print(
-                "likeperabs: ",
-                loadedLikePercentageDifferences["likePercentageDifferences"].sum(),
-                type(
-                    loadedLikePercentageDifferences[
-                        "likePercentageAbsDifferences"
-                    ].sum()
-                ),
-            )
-            print("len: ", len(loadedLikePercentageDifferences))
-            return (
-                True,
-                True,
-                videoTitle,
-                channelTitle,
-                result,
-                actual,
-                difference,
-                mae,
-                numpy.std(
-                    loadedLikePercentageDifferences["likePercentageDifferences"], ddof=1
-                ),
-                len(loadedVideoIDs),
-                noLikeInfo,
-                wordcloudPos,
-                wordcloudNeut,
-                wordcloudNeg,
-                barChartValues,
-            )
+
+            actual = 100 * (likes / (likes + dislikes))
+            difference = abs(result - actual)
+
+            if videoID not in loadedVideoIDs:
+                loadedVideoIDs.add(videoID)
+                pickle.dump(loadedVideoIDs, open("videoIDs.pickle", "wb"))
+
+                diff = result - actual
+                absDiff = abs(diff)
+                df2 = pd.DataFrame([diff, absDiff],)
+                loadedLikePercentageDifferences = loadedLikePercentageDifferences.append(
+                    df2, ignore_index=True
+                )
+                loadedLikePercentageDifferences.to_pickle(
+                    "likePercentageDifferences.pickle"
+                )
+
+                mae = loadedLikePercentageDifferences[
+                    "likePercentageAbsDifferences"
+                ].sum() / len(loadedLikePercentageDifferences)
+
+                return (
+                    True,
+                    True,
+                    videoTitle,
+                    channelTitle,
+                    result,
+                    actual,
+                    difference,
+                    mae,
+                    numpy.std(
+                        loadedLikePercentageDifferences["likePercentageAbsDifferences"],
+                        ddof=1,
+                    ),
+                    len(loadedVideoIDs),
+                    noLikeInfo,
+                    onlyLikes,
+                    wordcloudPos,
+                    wordcloudNeut,
+                    wordcloudNeg,
+                    barChartValues,
+                )
+
+            else:
+                mae = loadedLikePercentageDifferences[
+                    "likePercentageAbsDifferences"
+                ].sum() / len(loadedLikePercentageDifferences)
+                return (
+                    True,
+                    True,
+                    videoTitle,
+                    channelTitle,
+                    result,
+                    actual,
+                    difference,
+                    mae,
+                    numpy.std(
+                        loadedLikePercentageDifferences["likePercentageDifferences"], ddof=1
+                    ),
+                    len(loadedVideoIDs),
+                    noLikeInfo,
+                    onlyLikes,
+                    wordcloudPos,
+                    wordcloudNeut,
+                    wordcloudNeg,
+                    barChartValues,
+                )
 
     else:
         mae = loadedLikePercentageDifferences[
@@ -346,6 +366,7 @@ def program(link):
             ),
             len(loadedVideoIDs),
             noLikeInfo,
+            onlyLikes,
             wordcloudPos,
             wordcloudNeut,
             wordcloudNeg,
