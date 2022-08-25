@@ -92,7 +92,7 @@ else:
                     + str(noVideos)
                     + " different videos with a mean absolute prediction error of "
                     + str(round(mae, 2))
-                    + " percentage units and a standard deviation of "
+                    + " percentage points and a standard deviation of "
                     + str(round(std, 2))
                     + " percentage points"
                 )
